@@ -26,7 +26,7 @@ RUN python -m venv /py && \
     /py/bin/pip install -r /tmp/requirements.txt && \
     # /py/bin/pip install flake8 && \
     #shell scripting if statement, ends with fi, only install dev req(flake8) if we are in development environment
-    if [$DEV = "true" ]; \
+    if [ $DEV = "true" ]; \
       then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
     fi && \
     rm -rf /tmp && \
@@ -42,7 +42,7 @@ RUN python -m venv /py && \
         
 #updates env variable, PATH
 #ass this to system path
-ENV PATH = "/py/bin:$PATH"
+ENV PATH="/py/bin:$PATH"
 
 
 #using this line, we switch user from root user to django-user
