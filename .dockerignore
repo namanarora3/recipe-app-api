@@ -1,0 +1,20 @@
+#list of files that will be ignored using docker context
+#usually a standard file
+
+.git
+.gitignore
+
+#hidden docker file that may be created during the process but is not needed
+.docker
+
+#all pycache folders
+#ProTip - ususlly, we can specify all subdirectories using **, but this doesnt work in docker so we have to implicitly specify all level 0,1,2,3 directories here
+app/__pycache__/
+app/*/__pycache__/
+app/*/*/__pycache__/
+app/*/*/*/__pycache__/
+
+#all the virtual environments
+.env/
+.venv/
+venv/
