@@ -9,7 +9,7 @@ services:
     ports:
       - "8000:8000" #port 8000 on our local machine is mapped to port 8000 in docker container
     volumes:
-      - ./app:/app #mapping system directory to /app in our container. this helps to sync the code automatically without having to rebuild the container
+      - ./app:/app #mapping system directory to /app in our container. this helps to sync the code automatically without having to rebuild the container(2-way repationship)
     command: > #default command used to run the service, can be overwrititten by  specifying command when we do "docker-compose run"
       sh -c "python manage.py runserver 0.0.0.0:8000" 
       
