@@ -1,14 +1,19 @@
 # custom django managemant commands test
 
-from unittest.mock import patch #mock the behavoiur of the database
-from psycopg2 import OperationalError as Psycopg2OpError #possibility for when we try to connext to database before its ready
+from unittest.mock import patch  # mock the behavoiur of the database
+# possibility for when we try to connext to database before its ready
+from psycopg2 import OperationalError as Psycopg2OpError
+# allows to call the comand that we are testing
+from django.core.management import call_command
+
+from django.db.utils import OperationalError
+# base test class used to test unit test,
+# using simple testcase because we are testing without databse test
+from django.test import SimpleTestCase
 
 
-from django.core.management import call_command #allows to call the comand that we are testing
-from django.db.utils import OperationalError 
-from django.test import SimpleTestCase #base test class used to test unit test, using simple testcase because we are testing without databse test
-
-# video 8 from databse setup, didnt understand a word about these tests co copy pasted
+# video 8 from databse setup, didnt understand a
+# word about these tests co copy pasted
 @patch('core.management.commands.wait_for_db.Command.check')
 class CommandTests(SimpleTestCase):
     """Test commands."""
