@@ -15,8 +15,8 @@ class ModelTests(TestCase):
         password = 'testpass123'
         #create_user is a custom method
         user = get_user_model().objects.create_user(
-            email = email,
-            password = password,
+            email=email,
+            password=password,
 		)
         self.assertEqual(user.email, email)
         #check_password is provided by baseUserManager
