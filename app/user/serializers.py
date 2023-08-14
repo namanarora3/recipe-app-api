@@ -17,6 +17,17 @@ class UserSerializer(serializers.ModelSerializer):
        # defauly behaviour is to create without encryption, so thats why we overwrite it
        return get_user_model().objects.create_user(**validated_data)
 
+    def update(self, instance, validated_data):
+      '''Update and return User'''
+      password = validated_data.pop('password',None)
+      user = super().update(instance, validated_data=validated_data)
+
+      if password:
+        user.set_password(password)
+        user.save()
+
+      return user
+
 
 class AuthTokenSerialiser(serializers.Serializer):
     """Serializer for the user auth token"""
@@ -35,7 +46,7 @@ class AuthTokenSerialiser(serializers.Serializer):
 
       if not user:
          msg = "Invalid input credentials"
-         return serializers.ValidationError(msg,code='authorization')
+         raise serializers.ValidationError(msg,code='authorization')
 
       attrs['user'] = user
       return attrs
