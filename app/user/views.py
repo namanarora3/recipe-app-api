@@ -7,12 +7,12 @@ from rest_framework.settings import api_settings
 
 
 class CreateUserView(CreateAPIView):  # name format is important
-    """Create a new user in the system"""  # docstring is important
+    """AUTH HEADER NOT REQD, Create a new user in the system"""  # docstring is important
     serializer_class = UserSerializer
 
 
 class CreateTokenView(ObtainAuthToken):
-    '''create a new auth token for the user'''
+    '''AUTH HEADER NOT REQD, create a new auth token for the user'''
     # CUSTOM SERIALISER SO THAT WE CAN SHIFT FROM USERNAME TO EMAIL
     serializer_class = AuthTokenSerialiser
     # OPTIONAL- uses default, needed for browsable API
@@ -20,7 +20,7 @@ class CreateTokenView(ObtainAuthToken):
 
 
 class ManageUserView(RetrieveUpdateAPIView):
-    '''Manage the authenticated user'''
+    '''AUTH HEADER REQD, Manage the authenticated user'''
     serializer_class = UserSerializer
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
