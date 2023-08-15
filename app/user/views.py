@@ -1,12 +1,13 @@
 """Views for the user API"""
 from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
-from rest_framework import permissions,authentication
-from .serializers import UserSerializer,AuthTokenSerialiser
+from rest_framework import permissions, authentication
+from .serializers import UserSerializer, AuthTokenSerialiser
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 
-class CreateUserView(CreateAPIView): # name format is important
-    """Create a new user in the system""" # docstring is important
+
+class CreateUserView(CreateAPIView):  # name format is important
+    """Create a new user in the system"""  # docstring is important
     serializer_class = UserSerializer
 
 
@@ -28,7 +29,3 @@ class ManageUserView(RetrieveUpdateAPIView):
         '''Retrive and return the authenticated user'''
         user = self.request.user
         return user
-
-
-
-
