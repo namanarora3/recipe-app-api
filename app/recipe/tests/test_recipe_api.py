@@ -32,7 +32,7 @@ def create_recipe(user,**params):
 class PublicRecipeAPITests(TestCase):
   '''test unauthenticated api requests'''
   def setUp(self) -> None:
-    self.client = APIClient
+    self.client = APIClient()
 
   def test_auth_required(self):
     '''Test for auth is reqd to call API.'''
@@ -44,8 +44,8 @@ class PrivateRecipeAPITest(TestCase):
   '''test authenticated api requests'''
 
   def setUp(self) -> None:
-    self.client = APIClient
-    self.user = get_user_model().objects.create(
+    self.client = APIClient()
+    self.user = get_user_model().objects.create_user(
       email='test@example.com',
       password='testpass123',
       name='Test User'
@@ -66,7 +66,7 @@ class PrivateRecipeAPITest(TestCase):
     self.assertEqual(res.data,serialized.data)
 
   def test_recipe_list_limited_to_user(self):
-    user2 = get_user_model().objects.create(
+    user2 = get_user_model().objects.create_user(
       'test2@example.com',
       'test123'
     )
