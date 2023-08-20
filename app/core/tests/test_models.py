@@ -8,12 +8,14 @@ from django.contrib.auth import get_user_model
 from decimal import Decimal
 from core import models
 
+
 def create_user():
-        user = get_user_model().objects.create_user(
-            "test@example.com",
-            "testpass123"
-        )
-        return user
+    user = get_user_model().objects.create_user(
+        "test@example.com",
+        "testpass123"
+    )
+    return user
+
 
 class ModelTests(TestCase):
     """ adding all tests for user model here"""

@@ -40,27 +40,25 @@ class RecipeViewSet(viewsets.ModelViewSet):
         # return super().perform_create(serializer)
 
 
-class TagViewSet(
+class BaseRecipeAttrViewSet(
     mixins.DestroyModelMixin,
     mixins.UpdateModelMixin,
     mixins.ListModelMixin,
     viewsets.GenericViewSet
 ):
+    '''Base viewSet for recipe attributes'''
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user).order_by('-name')
+
+
+class TagViewSet(BaseRecipeAttrViewSet):
     serializer_class = TagSerializer
     queryset = Tag.objects.all()
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
-
-    def get_queryset(self):
-        return self.queryset.filter(user=self.request.user).order_by('-name')
 
 
-class IngredientViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class IngredientViewSet(BaseRecipeAttrViewSet):
     serializer_class = IngredientSerializer
     queryset = Ingredient.objects.all()
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return self.queryset.filter(user=self.request.user).order_by('-name')
-
