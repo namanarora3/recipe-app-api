@@ -1,10 +1,17 @@
 from rest_framework.serializers import ModelSerializer
-from core.models import Recipe, Tag
+from core.models import Recipe, Tag, Ingredient
 
 
 class TagSerializer(ModelSerializer):
     class Meta:
         model = Tag
+        fields = ['id', 'name']
+        read_only_fields = ['id']
+
+class IngredientSerializer(ModelSerializer):
+    '''Serializer for Ingredients'''
+    class Meta:
+        model = Ingredient
         fields = ['id', 'name']
         read_only_fields = ['id']
 
@@ -53,3 +60,6 @@ class RecipeSerializer(ModelSerializer):
 class RecipeDetailSerialiser(RecipeSerializer):
     class meta(RecipeSerializer.Meta):
         fields = RecipeSerializer.Meta.fields + ['description']
+
+
+
