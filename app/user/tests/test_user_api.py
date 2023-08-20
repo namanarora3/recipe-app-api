@@ -74,7 +74,7 @@ class PublicUserApiTests(TestCase):
 
         create_user(**payload)
         res = self.client.post(CREATE_TOKEN_URL, payload)
-        print(res.status_code, res.data['token'])
+        # print(res.status_code, res.data['token'])
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertIn('token', res.data)
 

@@ -7,7 +7,9 @@ from rest_framework.settings import api_settings
 
 
 class CreateUserView(CreateAPIView):  # name format is important
-    """AUTH HEADER NOT REQD, Create a new user in the system"""  # docstring is important
+    """
+    AUTH HEADER NOT REQD, Create a new user in the system
+    """  # docstring is important
     serializer_class = UserSerializer
 
 
