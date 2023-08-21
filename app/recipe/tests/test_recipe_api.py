@@ -11,7 +11,7 @@ from rest_framework import status
 # from rest_framework
 from core.models import Recipe, Tag, Ingredient
 
-from recipe.serializers import RecipeSerializer, RecipeDetailSerialiser
+from recipe.serializers import RecipeSerializer, RecipeDetailSerializer
 
 import tempfile
 import os
@@ -108,7 +108,7 @@ class PrivateRecipeAPITest(TestCase):
 
         res = self.client.get(url)
 
-        serializer = RecipeDetailSerialiser(recipe)
+        serializer = RecipeDetailSerializer(recipe)
 
         self.assertEqual(res.data, serializer.data)
 

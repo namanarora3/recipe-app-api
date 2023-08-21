@@ -13,7 +13,7 @@ from core.models import (
 )
 from recipe.serializers import (
     RecipeSerializer,
-    RecipeDetailSerialiser,
+    RecipeDetailSerializer,
     TagSerializer,
     IngredientSerializer,
     RecipeImageSerializer
@@ -22,7 +22,7 @@ from recipe.serializers import (
 
 class RecipeViewSet(viewsets.ModelViewSet):
     '''View for manage recipe APIs'''
-    serializer_class = RecipeDetailSerialiser
+    serializer_class = RecipeDetailSerializer
     queryset = Recipe.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -34,7 +34,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         print(self.action)
         if self.action == "partial_update":
-            return RecipeDetailSerialiser
+            return RecipeDetailSerializer
         if self.action == 'list':
             return RecipeSerializer
         elif self.action == 'upload_image':

@@ -75,7 +75,7 @@ class RecipeSerializer(ModelSerializer):
         return instance
 
 
-class RecipeDetailSerialiser(RecipeSerializer):
+class RecipeDetailSerializer(RecipeSerializer):
     class meta(RecipeSerializer.Meta):
         fields = RecipeSerializer.Meta.fields + ['description', 'image']
 
