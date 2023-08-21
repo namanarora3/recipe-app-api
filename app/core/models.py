@@ -13,6 +13,7 @@ from django.conf import settings
 import uuid
 import os
 
+
 def recipe_image_file_path(instance, filename):
     '''generate file path for new recipe image'''
     # stripping the extension from the end

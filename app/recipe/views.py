@@ -32,9 +32,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return self.queryset.filter(user=self.request.user).order_by('-id')
 
     def get_serializer_class(self):
-        print(self.action)
-        if self.action == "partial_update":
-            return RecipeDetailSerializer
         if self.action == 'list':
             return RecipeSerializer
         elif self.action == 'upload_image':
@@ -54,7 +51,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class BaseRecipeAttrViewSet(

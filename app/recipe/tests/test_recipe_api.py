@@ -29,6 +29,7 @@ def create_user(**params):
 def detail_url(recipe_id):
     return reverse('recipe:recipe-detail', args=[recipe_id])
 
+
 def image_upload_url(recipe_id):
     """Create and return an image upload URL."""
     return reverse('recipe:recipe-upload-image', args=[recipe_id])
@@ -379,6 +380,7 @@ class PrivateRecipeAPITest(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(recipe.ingredients.count(), 0)
+
 
 class ImageUploadTests(TestCase):
     """Tests for the image upload API."""
