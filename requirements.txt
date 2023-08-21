@@ -5,4 +5,6 @@ psycopg2>=2.8.6,<2.9
 #documentation
 drf-spectacular>=0.15,<0.16
 
+pillow>=8.2.0,<8.3.0
+
 

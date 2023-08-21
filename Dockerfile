@@ -13,7 +13,7 @@ COPY ./app /app
 #def dir from where our commands will be running -> from base django proj folder in this case
 WORKDIR /app
 #expose the port needed for uk what
-EXPOSE 8000 
+EXPOSE 8000
 #defines build arguement DEV defaulting to false, docker-compose can overwrite it to true
 ARG DEV=false
 #run command runs commands on python image, multiple commands can be seperated by "&& \" and its beneficial to run multiple commands inn a single command
@@ -25,10 +25,10 @@ RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     #in the next 3 lines -> how to add psycopg2 to alpine image in docker
     #step1: install postgresql client and keep it for future
-    apk add --update --no-cache postgresql-client && \ 
-    #step2: install dependencies needed for installing psycopg2 and compiling it 
+    apk add --update --no-cache postgresql-client jpeg-dev && \
+    #step2: install dependencies needed for installing psycopg2 and compiling it
     apk add --update --no-cache --virtual .temp-build-deps \
-      build-base postgresql-dev musl-dev && \
+      build-base postgresql-dev musl-dev zlib zlib-dev && \
     /py/bin/pip install -r /tmp/requirements.txt && \
     # /py/bin/pip install flake8 && \
     #shell scripting if statement, ends with fi, only install dev req(flake8) if we are in development environment
@@ -46,8 +46,16 @@ RUN python -m venv /py && \
         #do not create home dir for this user,to keep iage lightweight
         --no-create-home \
         #name
-        django-user 
-        
+        django-user && \
+        # creating static and media directiries... -p is used to create all folders that dont exist by default
+        mkdir -p /vol/web/media && \
+        mkdir -p /vol/web/static && \
+        # changing the owner and group to django-user. -R means recursive
+        chown -R django-user:django-user /vol && \
+        # changing the mod, changing the permissions, 755 means granting all permissions
+        chmod -R 755 /vol
+
+
 #updates env variable, PATH
 #ass this to system path
 ENV PATH="/py/bin:$PATH"
