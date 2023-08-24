@@ -63,4 +63,4 @@ ENV PATH="/py/bin:$PATH"
 
 #using this line, we switch user from root user to django-user
 #before this point, root user was needed to setup the docker image, but now we can shift to the django-uuser with less permissions
-USER django-user
+# USER django-user
