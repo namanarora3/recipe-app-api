@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
     '''serializer for the user object'''
     class Meta:
         model = get_user_model()
-        fields = ['email', 'password', 'name']
+        fields = ['email', 'password', 'name', 'image']
         extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}
 
     def create(self, validated_data):
@@ -28,6 +28,13 @@ class UserSerializer(serializers.ModelSerializer):
             user.save()
 
         return user
+
+class UserImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['image', 'email']
+        read_only_fields = ['email']
+        extra_kwargs = {'image': {'required': 'True'}}
 
 
 class AuthTokenSerialiser(serializers.Serializer):

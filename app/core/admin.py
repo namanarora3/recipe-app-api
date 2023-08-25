@@ -19,7 +19,8 @@ class UserAdmin(BaseUserAdmin):
             {
                 'fields': (
                   'email',
-                  'password'
+                  'password',
+
                 )
             }
         ),
@@ -33,9 +34,10 @@ class UserAdmin(BaseUserAdmin):
             }
         ),
         (
-            _('Important Dates'), {
+            _('Important Dates and Images'), {
                 'fields': (
                     'last_login',
+                    'image'
                 )
             }
         )
@@ -55,7 +57,8 @@ class UserAdmin(BaseUserAdmin):
                     'name',
                     'is_active',
                     'is_staff',
-                    'is_superuser'
+                    'is_superuser',
+                    'image'
                 )
             }
         ),
