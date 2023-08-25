@@ -20,5 +20,6 @@ app_name = 'recipe'
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('public/', views.PublicRecipeView.as_view({'get': 'list'}), name='public'),
 
 ]
