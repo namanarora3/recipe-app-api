@@ -35,7 +35,7 @@ from recipe.serializers import (
                 description="Comma sepersted list of IDs to filter"
             ),
             OpenApiParameter(
-                "Ingredients",
+                "ingredients",
                 OpenApiTypes.STR,
                 description="Comma seperated list if ingredients IDs to filter"
             )
