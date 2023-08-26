@@ -2,7 +2,13 @@
 from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
 from rest_framework.views import APIView
 from rest_framework import permissions, authentication
-from .serializers import UserSerializer, AuthTokenSerialiser, UserImageSerializer
+from .serializers import (
+    UserSerializer,
+    AuthTokenSerialiser,
+    UserImageSerializer,
+    ChangePasswordSerializer,
+    ResetPasswordSerializer
+)
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 
@@ -12,6 +18,14 @@ from rest_framework import status
 
 from rest_framework.response import Response
 
+from django.contrib.auth import get_user_model
+
+import random, math
+
+from user.email import send
+
+from core.models import ResetPassword
+
 from drf_spectacular.utils import (
     extend_schema_view,
     extend_schema,
@@ -19,6 +33,22 @@ from drf_spectacular.utils import (
     OpenApiTypes,
 )
 
+def createOTP():
+    digits = "0123456789"
+    OTP = ""
+    for i in range(4) :
+        OTP += digits[math.floor(random.random() * 10)]
+    return OTP
+
+def send_email(otp, email):
+    url = "http://127.0.0.1:8000/api/user/reset_password/?email="+email+"&otp="+otp
+
+    msg = "please clink on the URL for setting your password- "+ url
+    send(
+        "Password Reset OTP from Recipe APP",
+        msg,
+        [email]
+    )
 
 class CreateUserView(CreateAPIView):  # name format is important
     """
@@ -57,4 +87,70 @@ class ImageUpdateView(mixins.UpdateModelMixin, viewsets.GenericViewSet):
         self.get_object().image.delete()
         return super().perform_update(serializer)
 
+class ChangePasswordView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
+    def post(self, request):
+        serializer = ChangePasswordSerializer(data=request.data)
+        # print(serializer.data)
+        if(serializer.is_valid()):
+            user = request.user
+            if user.check_password(serializer.data.get('old_password')):
+                user.set_password(serializer.data.get('new_password2'))
+                user.save()
+                return Response({"message": "Password updated successfully"}, status=status.HTTP_200_OK)
+            return Response({'error': "Old password incorrect"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def get(self, request):
+        return Response({"message": "Change your password here"})
+
+
+class ResetPasswordGenerateToken(APIView):
+
+    def post(self, request):
+        email = request.data.get('email')
+        try:
+            user = get_user_model().objects.get(email=email)
+        except:
+            user = None
+        if user is None:
+            return Response({"error": "User with email not found"}, status=status.HTTP_400_BAD_REQUEST)
+        token, created = ResetPassword.objects.get_or_create(
+            user=user
+        )
+        OTP = createOTP()
+        setattr(token, 'otp', OTP)
+        token.save()
+        send_email(OTP, email)
+        return Response({"message": "email sent successfully"}, status=status.HTTP_200_OK)
+
+class ResetPasswordView(APIView):
+
+    def post(self, request):
+        email = request.query_params.get('email', None)
+        otp = request.query_params.get('otp', None)
+        if email is None or otp is None:
+            return Response({'error': "Invalid URL"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = ResetPasswordSerializer(data=request.data)
+        # print(serializer.data)
+        if(serializer.is_valid()):
+            try:
+                # user = get_user_model().objects.get(email=serializer.data.get('email'))
+                user = get_user_model().objects.get(email=email)
+            except:
+                return Response({'error': "email not recognised"}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                # token = ResetPassword.objects.get(user=user, otp=serializer.data.get('token'))
+                token = ResetPassword.objects.get(user=user, otp=otp)
+            except:
+                return Response({'error': "email or OTP incorrect, please try again!"}, status=status.HTTP_400_BAD_REQUEST)
+            if token is not None:
+                user.set_password(serializer.data.get('new_password2'))
+                user.save()
+                setattr(token, 'otp', '0')
+                token.save()
+                return Response({"message": "Password updated successfully"}, status=status.HTTP_200_OK)
+            return Response({'error': "email or OTP incorrect"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

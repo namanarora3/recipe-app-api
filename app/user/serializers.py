@@ -58,3 +58,26 @@ class AuthTokenSerialiser(serializers.Serializer):
 
         attrs['user'] = user
         return attrs
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password1 = serializers.CharField(required=True)
+    new_password2 = serializers.CharField(required=True)
+
+    def validate(self, attrs):
+        if(attrs['new_password1'] != attrs['new_password2']):
+            raise serializers.ValidationError("New passwords dont match", code="ValueError")
+        return super().validate(attrs)
+
+class ResetPasswordSerializer(serializers.Serializer):
+    new_password1 = serializers.CharField(required=True)
+    new_password2 = serializers.CharField(required=True)
+
+
+    def validate(self, attrs):
+        if(attrs['new_password1'] != attrs['new_password2']):
+            raise serializers.ValidationError("New passwords dont match", code="ValueError")
+        return super().validate(attrs)
+
+
+

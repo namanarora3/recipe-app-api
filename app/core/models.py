@@ -110,3 +110,13 @@ class Ingredient(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+class ResetPassword(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    otp = models.CharField(max_length=10, default="")
+
+    def __str__(self):
+        return self.user.name+' '+self.user.email
