@@ -133,5 +133,5 @@ class IngredientViewSet(BaseRecipeAttrViewSet):
 
 class PublicRecipeView(mixins.ListModelMixin, viewsets.GenericViewSet):
     '''AUTH HEADER NOT REQD, get req only'''
-    queryset = Recipe.objects.filter(is_private=False)
+    queryset = Recipe.objects.filter(is_private=False).order_by('id')
     serializer_class = RecipeSerializer
