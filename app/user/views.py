@@ -90,8 +90,10 @@ class ImageUpdateView(mixins.UpdateModelMixin, viewsets.GenericViewSet):
 
 class ChangePasswordView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ChangePasswordSerializer
 
     def post(self, request):
+        '''AUTH HEADER REQD'''
         serializer = ChangePasswordSerializer(data=request.data)
         # print(serializer.data)
         if(serializer.is_valid()):
@@ -104,14 +106,11 @@ class ChangePasswordView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-    def get(self, request):
-        return Response({"message": "Change your password here"})
-
-
 class ResetPasswordGenerateToken(APIView):
     serializer_class = generateOTPSerializer
 
     def post(self, request):
+        '''AUTH HEADER NOT REQD'''
         email = request.data.get('email')
         try:
             user = get_user_model().objects.get(email=email)
@@ -135,6 +134,10 @@ class ResetPasswordView(APIView):
     serializer_class = ResetPasswordSerializer
 
     def post(self, request):
+        '''
+        AUTH HEADER NOT REQD, send email and otp in query params
+        Eg. http://127.0.0.1:8000/api/user/reset_password/?email=example@gmail.com&otp=1234
+        '''
         email = request.query_params.get('email', None)
         otp = request.query_params.get('otp', None)
         if email is None or otp is None:
