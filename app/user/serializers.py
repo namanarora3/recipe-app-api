@@ -79,5 +79,7 @@ class ResetPasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError("New passwords dont match", code="ValueError")
         return super().validate(attrs)
 
+class generateOTPSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
 
 

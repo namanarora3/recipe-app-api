@@ -7,7 +7,8 @@ from .serializers import (
     AuthTokenSerialiser,
     UserImageSerializer,
     ChangePasswordSerializer,
-    ResetPasswordSerializer
+    ResetPasswordSerializer,
+    generateOTPSerializer
 )
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
@@ -108,6 +109,7 @@ class ChangePasswordView(APIView):
 
 
 class ResetPasswordGenerateToken(APIView):
+    serializer_class = generateOTPSerializer
 
     def post(self, request):
         email = request.data.get('email')
@@ -123,10 +125,14 @@ class ResetPasswordGenerateToken(APIView):
         OTP = createOTP()
         setattr(token, 'otp', OTP)
         token.save()
-        send_email(OTP, email)
+        try:
+            send_email(OTP, email)
+        except:
+            Response({"error": "Unable to send OTP, please try again!"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"message": "email sent successfully"}, status=status.HTTP_200_OK)
 
 class ResetPasswordView(APIView):
+    serializer_class = ResetPasswordSerializer
 
     def post(self, request):
         email = request.query_params.get('email', None)
@@ -154,3 +160,4 @@ class ResetPasswordView(APIView):
                 return Response({"message": "Password updated successfully"}, status=status.HTTP_200_OK)
             return Response({'error': "email or OTP incorrect"}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

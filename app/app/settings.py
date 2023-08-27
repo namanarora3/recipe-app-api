@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-m1^nrxv-#%od0aye#24m3-g11#4%p1q@%wj2t*pu&y@xx9l*1e'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_ALLOW_ALL = False
@@ -163,8 +164,8 @@ SPECTACULAR_SETTINGS = {
 # Email Backend Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Replace with your preferred backend
 
-EMAIL_PORT = 587  # Replace with your email port
-EMAIL_USE_TLS = True  # Set to False if your email server doesn't use TLS
-EMAIL_HOST = 'smtp.gmail.com'  # Replace with your email host for gmail -> 'smtp.gmail.com'
-EMAIL_HOST_USER = '3namanarora@gmail.com'  # Replace with your email username
-EMAIL_HOST_PASSWORD = 'kdmqkcsaedfsrpeo'  # Replace with your email password
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)  # Set to False if your email server doesn't use TLS
+EMAIL_HOST = config('EMAIL_HOST')  # Replace with your email host for gmail -> 'smtp.gmail.com'
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')  # Replace with your email username
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')  # Replace with your email password
