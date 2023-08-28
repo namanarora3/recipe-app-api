@@ -141,6 +141,7 @@ class PublicRecipeDetailView(APIView):
     serializer_class = RecipeDetailSerializer
 
     def get(self, request, pk):
+        '''AUTH HEADER NOT REQD'''
         try:
             recipe = Recipe.objects.get(id=pk,is_private=0)
         except:
