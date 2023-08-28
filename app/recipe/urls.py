@@ -21,6 +21,6 @@ app_name = 'recipe'
 urlpatterns = [
     path('', include(router.urls)),
     path('public/', views.PublicRecipeView.as_view({'get': 'list'}), name='public'),
-    path('public/<int:pk>', views.PublicRecipeDetailView.as_view())
+    path('public/<int:pk>/', views.PublicRecipeDetailView.as_view())
 
 ]
