@@ -2,6 +2,7 @@
 
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
+from rest_framework.views import APIView
 # from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -135,3 +136,14 @@ class PublicRecipeView(mixins.ListModelMixin, viewsets.GenericViewSet):
     '''AUTH HEADER NOT REQD, get req only'''
     queryset = Recipe.objects.filter(is_private=False).order_by('id')
     serializer_class = RecipeSerializer
+
+class PublicRecipeDetailView(APIView):
+    serializer_class = RecipeDetailSerializer
+
+    def get(self, request, pk):
+        try:
+            recipe = Recipe.objects.get(id=pk,is_private=0)
+        except:
+            return Response({"error": "Reecipe Not Found"}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = RecipeDetailSerializer(recipe)
+        return Response(serializer.data, status=status.HTTP_200_OK)
